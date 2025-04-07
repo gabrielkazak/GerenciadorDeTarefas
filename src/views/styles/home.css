@@ -1,0 +1,109 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #161616;
+  }
+
+#search{
+    border: 1px solid rgb(220, 220, 220) !important;
+}
+
+.cabecalho{
+    border-bottom: 1px solid rgb(220, 220, 220);
+    padding: 1em 0;
+}
+
+.container{
+    border-radius: 10px !important;
+    height: 625px;
+    overflow-y:  scroll    ;
+}
+
+.botao{
+    cursor: pointer !important;
+}
+
+.task-complete{
+    border-radius: 50%;
+    background-color: rgb(168, 255, 168);
+    border: none;
+    color: white;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    transition: 0.5s ease;
+}
+
+.task-complete:hover{
+    background-color: green;
+}
+
+.task-edit{
+    border: none;
+    color: white;
+    background-color: rgb(60, 60, 60);
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 6px;
+    margin: 0 1em;
+}
+
+.task-delete{
+    border-radius: 50%;
+    background-color: rgb(255, 168, 168);
+    border: none;
+    color: white;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    transition: 0.5s ease;
+}
+
+.task-delete:hover{
+    background-color: red;
+}
+
+.task {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .task-left p,
+  .task-left i {
+    margin: 0;
+  }
+  
+  .task-left .task-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-right: 10px;
+  }
+  
+  .task-left .task-time {
+    font-size: 0.9rem;
+    color: #888;
+  }
+  
+.options button{
+    border: none;
+    color: rgb(220, 220, 220);
+    background-color: none;
+    background: none;
+    border-bottom: 1px solid rgb(220, 220, 220);
+    transition: 0.5s ease;
+}
+
+.todas:hover{
+    color: #161616;
+    border-bottom: 1px solid #161616;
+}
+
+.concluidas:hover{
+    color: rgb(168, 255, 168);
+    border-bottom: 1px solid rgb(168, 255, 168);
+}
+
+.atrasadas:hover{
+    color: rgb(255, 168, 168);
+    border-bottom: 1px solid rgb(255, 168, 168);
+}

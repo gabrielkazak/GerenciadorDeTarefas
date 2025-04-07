@@ -1,0 +1,50 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #161616;
+  }
+
+.signin{
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid black ;
+    transition: 0.3s ease;
+}
+
+.signin:hover{
+    padding-bottom: 4px;
+}
+
+.button-31 {
+  background-color: #161616;
+  border-radius: 12px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.5;
+  margin: 0;
+  max-width: none;
+  min-height: 44px;
+  min-width: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 10px 20px 10px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.button-31:hover,
+.button-31:focus {
+  opacity: .75;
+}
