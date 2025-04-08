@@ -4,6 +4,8 @@ html, body {
     background-color: #161616;
   }
 
+
+/* Cabeçalho */
 #search{
     border: 1px solid rgb(220, 220, 220) !important;
 }
@@ -13,6 +15,7 @@ html, body {
     padding: 1em 0;
 }
 
+/*Container Geral*/
 .container{
     border-radius: 10px !important;
     height: 625px;
@@ -23,21 +26,7 @@ html, body {
     cursor: pointer !important;
 }
 
-.task-complete{
-    border-radius: 50%;
-    background-color: rgb(168, 255, 168);
-    border: none;
-    color: white;
-    font-weight: bold;
-    width: 35px;
-    height: 35px;
-    transition: 0.5s ease;
-}
-
-.task-complete:hover{
-    background-color: green;
-}
-
+/*Botao que edita as tasks*/
 .task-edit{
     border: none;
     color: white;
@@ -48,42 +37,30 @@ html, body {
     margin: 0 1em;
 }
 
-.task-delete{
-    border-radius: 50%;
-    background-color: rgb(255, 168, 168);
-    border: none;
-    color: white;
-    font-weight: bold;
-    width: 35px;
-    height: 35px;
-    transition: 0.5s ease;
-}
-
-.task-delete:hover{
-    background-color: red;
-}
-
+/*Container geral de qualquer tarefa*/
 .task {
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
   }
   
-  .task-left p,
-  .task-left i {
+/*Próximos 3 estilos são do lado esquerdo da task*/
+.task-left p,
+.task-left i {
     margin: 0;
   }
   
-  .task-left .task-title {
+.task-left .task-title {
     font-size: 1.2rem;
     font-weight: 500;
     margin-right: 10px;
   }
   
-  .task-left .task-time {
+.task-left .task-time {
     font-size: 0.9rem;
     color: #888;
   }
   
+/* Pega todos os botoes da classe options*/
 .options button{
     border: none;
     color: rgb(220, 220, 220);
@@ -91,6 +68,11 @@ html, body {
     background: none;
     border-bottom: 1px solid rgb(220, 220, 220);
     transition: 0.5s ease;
+}
+
+/*Próximas 6 estilizações são as específicas de cada botao de options*/
+.todas{
+    color: #161616;
 }
 
 .todas:hover{
@@ -107,3 +89,98 @@ html, body {
     color: rgb(255, 168, 168);
     border-bottom: 1px solid rgb(255, 168, 168);
 }
+
+.completed-tasks{
+    display: none;
+}
+
+.late-tasks{
+    display: none;
+}
+
+
+/*Criador de tarefas*/
+.task-creator {
+    display: none;
+    border-radius: 12px;
+    border: 1px solid black;
+    width: 50%;
+    height: 60%;
+    background-color: #ffffff;
+    position: absolute;
+    top: 15%; /* valor ajustável conforme o quanto você quer subir */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+
+  /*Overlay que aparece quando o task-creator é ativado*/
+  .task-overlay{
+    display: none;
+  }
+
+  /*Estilização do botao importado*/
+
+  .button-31 {
+    background-color: #161616;
+    border-radius: 12px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+    min-height: 44px;
+    min-width: 10px;
+    outline: none;
+    overflow: hidden;
+    padding: 8px 20px 10px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 30%;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  
+  .button-31:hover,
+  .button-31:focus {
+    opacity: .75;
+  }
+
+  /*Animação de entrada do calendário*/
+  .calendar-slide {
+    animation: slideUp 1s ease forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /*Estilização dos dias específicos do calendário*/
+  .calendario-dia{
+    cursor: pointer;
+  }
+
+  .calendario-dia:hover{
+    background-color: #343333 !important;
+  }
+  
+  
+  
+  
