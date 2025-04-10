@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const autenticar = require('../middlewares/auth')
-const loginRoutes = require('./loginRoute')
+const loginRoutes = require('./loginRoutes')
 const signInRoutes = require('./signinRoutes')
 const taskRoutes = require('./taskRoutes')
 
