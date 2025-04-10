@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Tarefa = require('../models/Tarefa');
 
-router.post('/tasks', async(req, res) =>{
+router.post('/', async(req, res) =>{
     try{
         const {titulo, horario, data, estado, id_usuario} = req.body;
 
@@ -23,7 +23,7 @@ router.post('/tasks', async(req, res) =>{
 
 
 
-router.get('/tasks/:id_usuario', async (req, res) => {
+router.get('/:id_usuario', async (req, res) => {
     try {
         const { id_usuario } = req.params;
 
@@ -44,7 +44,7 @@ router.get('/tasks/:id_usuario', async (req, res) => {
 
 
 
-router.put('/tasks', async (req, res) => {
+router.put('/', async (req, res) => {
     try {
         const { id, titulo, horario, data, estado, id_usuario } = req.body;
 
@@ -70,7 +70,7 @@ router.put('/tasks', async (req, res) => {
 
 
 
-router.delete('/tasks/:id/:id_usuario', async (req, res) => {
+router.delete('/:id/:id_usuario', async (req, res) => {
     try {
         const { id, id_usuario } = req.params;
 
@@ -95,7 +95,7 @@ router.delete('/tasks/:id/:id_usuario', async (req, res) => {
 
 
 
-router.patch('/tasks/:id/:id_usuario', async (req, res)=>{
+router.patch('/:id/:id_usuario', async (req, res)=>{
     try{
         const {id, id_usuario} = req.params;
         const {estado} = req.body;
