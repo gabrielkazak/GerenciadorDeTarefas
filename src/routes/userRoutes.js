@@ -12,7 +12,7 @@ router.get('/', (req,res)=>{
 
 router.use('/', loginRoutes);
 router.use('/', signInRoutes);
-router.use('/', taskRoutes);
+router.use('/tasks', autenticar, taskRoutes);
 
 router.get('/protegida', autenticar, (req, res) => {
     res.json({ mensagem: `Acesso concedido para ${req.usuario.tipo}` });

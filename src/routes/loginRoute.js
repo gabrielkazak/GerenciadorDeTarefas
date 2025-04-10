@@ -7,7 +7,6 @@ require('dotenv').config();
 router.post('/login', async (req, res)=>{
     try{
         //Usuario.testar();
-        
         const {email, senha} = req.body;
         console.log("Email recebido", email);
 
@@ -30,7 +29,7 @@ router.post('/login', async (req, res)=>{
             { expiresIn: '8h' }
         );
 
-        res.json({ token });
+        res.json({ token, id_usuario: usuario.id });
 
     } catch (error) {
         console.error("Erro no servidor:", error);
