@@ -6,8 +6,8 @@ class Tarefa{
         return result[0];
     }
 
-    static async read(id_usuario){
-        const result = await db.query('SELECT * FROM tasks WHERE id_usuario = $1', [id_usuario]);
+    static async read(id_usuario, data){
+        const result = await db.query('SELECT * FROM tasks WHERE id_usuario = $1 AND data = $2', [id_usuario, data]);
         return result;
     }
 

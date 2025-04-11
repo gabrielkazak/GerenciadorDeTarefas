@@ -1,11 +1,12 @@
 function atualizarData() { //Função que atualiza a data que aparece no menu Hamburguer
-    const data = new Date();
-    const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    const dataFormatada = data.toLocaleDateString('pt-BR', opcoes);
+  const hoje = new Date();
 
-    const dataMenu = document.getElementById('dataAtual');
+  // Para exibir no menu hamburguer
+  const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
 
-    if (dataMenu) dataMenu.textContent = dataFormatada;
+  const dataMenu = document.getElementById('dataAtual');
+  if (dataMenu) dataMenu.textContent = dataFormatada;
   }
 
   atualizarData(); //Chamada da função, para ocorre assim que a página é carregada
@@ -79,6 +80,7 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
   })
 
   document.querySelector('.btn-close').addEventListener('click', function(){
+    editTask.style.display = 'none';
     createTask.style.display = 'none'
     overlay.style.display = 'none'
   })
