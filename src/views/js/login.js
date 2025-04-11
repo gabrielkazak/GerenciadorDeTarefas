@@ -39,6 +39,7 @@ function toggleSenha() {
             const data = await response.json();
             localStorage.setItem('token', data.token);
             localStorage.setItem('id_usuario', data.id_usuario);
+            localStorage.setItem('username', data.username)
             window.location.href = 'home.html';
         } else {
             const data = await response.json();

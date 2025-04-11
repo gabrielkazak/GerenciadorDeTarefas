@@ -171,3 +171,6 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
     opcoes?.classList.remove('d-none');
     calendarioContainer.classList.add('d-none');
   })
+
+
+  

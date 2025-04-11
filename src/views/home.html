@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles/home.css">
 </head>
 
-<body class="h-100 d-flex align-items-center justify-content-center bg-dark">
+<body class="h-100 d-flex align-items-center justify-content-center bg-dark" ng-app="tarefas" ng-controller="Rest">
 
   <div class="container position-relative bg-light flex-column ms-3 me-3" style="height: 85vh; display: flex;">
 
@@ -20,7 +20,7 @@
           </button>
           <ul class="dropdown-menu">
             <li class="dropdown-header text-left">
-              <strong>Gabriel</strong><br>
+              <strong class="nomeUsuario"></strong><br>
               <small id="dataAtual"></small>
             </li>
             <li><hr class="dropdown-divider"></li>
@@ -60,8 +60,8 @@
       <div class="today">
         <h2 class="ms-2 mt-3">Hoje</h2>
 
-        <div ng-app="tarefas" ng-controller="Rest">
-          <div class="task align-items-center justify-content-between" ng-repeat="tarefa in tarefas" data-id="{{tarefa.id}}">
+        <div>
+          <div class="task align-items-center justify-content-between" ng-repeat="tarefa in hoje_pendentes" data-id="{{tarefa.id}}">
             <div class="task-left d-flex align-items-center gap-3">
               <div class="d-flex flex-column align-items-center">
                 <i class="bi bi-clipboard fs-4"></i>
@@ -97,47 +97,23 @@
       <div class="tomorrow">
         <h2 class="ms-2 mt-4">Amanhã</h2>
   
-        <div class="task d-flex align-items-center justify-content-between">
+        <div class="task align-items-center justify-content-between" ng-repeat="tarefa in amanha_pendentes" data-id="{{tarefa.id}}">
           <div class="task-left d-flex align-items-center gap-3">
             <div class="d-flex flex-column align-items-center">
               <i class="bi bi-clipboard fs-4"></i>
-              <p class="task-date mb-0">11/04</p>
+              <p class="task-date mb-0">{{tarefa.data}}</p>
             </div>
             <div class="d-flex flex-column">
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
+              <p class="task-title mb-0">{{tarefa.titulo}}</p>
+              <p class="task-time mb-0">{{tarefa.horario}}</p>
             </div>
           </div>
           <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
+            <button class="btn text-success task-complete" aria-label="Concluir tarefa">
               <i class="bi bi-check-circle"></i>
-            </button>          
-            <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
-              <i class="bi bi-trash"></i>
             </button>
-          </div>
-        </div>
-        
-        
-  
-        <div class="task d-flex align-items-center justify-content-between">
-          <div class="task-left d-flex align-items-center gap-3">
-            <div class="d-flex flex-column align-items-center">
-              <i class="bi bi-calendar-event fs-4"></i>
-              <p class="task-date mb-0">11/04</p>
-            </div>
-            <div class="d-flex flex-column">
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
-            </div>
-          </div>
-          <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
-              <i class="bi bi-check-circle"></i>
-            </button>          
             <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
+            <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -150,32 +126,19 @@
       <div class="today">
         <h2 class="ms-2 mt-3">Hoje</h2>
   
-        <div class="task d-flex align-items-center justify-content-between">
+        <div class="task d-flex align-items-center justify-content-between concluida mb-1" ng-repeat="tarefa in hoje_concluidas" data-id="{{tarefa.id}}">
           <div class="task-left d-flex align-items-center gap-3">
+            <div class="d-flex flex-column align-items-center">
             <i class="bi bi-clipboard fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Ir pra escola</p>
-              <p class="task-time mb-0">18:30-22:15</p>
+            <p class="task-date mb-0">{{tarefa.data}}</p>
+          </div>
+          <div>
+            <p class="task-title mb-0">{{tarefa.titulo}}</p>
+            <p class="task-time mb-0">{{tarefa.horario}}</p>
             </div>
           </div>
           <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-danger" aria-label="Excluir tarefa">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </div>
-  
-        
-        <div class="task d-flex align-items-center justify-content-between">
-          <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-calendar-event fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Ir pra escola</p>
-              <p class="task-time mb-0">18:30-22:15</p>
-            </div>
-          </div>
-          <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-danger" aria-label="Excluir tarefa">
+            <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -186,129 +149,78 @@
       <div class="yesterday">
         <h2 class="ms-2 mt-4">Ontem</h2>
   
-        <div class="task d-flex align-items-center justify-content-between">
+        <div class="task d-flex align-items-center justify-content-between concluida mb-1" ng-repeat="tarefa in ontem_concluidas" data-id="{{tarefa.id}}">
           <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-clipboard fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
+            <div class="d-flex flex-column align-items-center">
+              <i class="bi bi-clipboard fs-4"></i>
+              <p class="task-date mb-0">{{tarefa.data}}</p>
+            </div>
+          <div>
+            <p class="task-title mb-0">{{tarefa.titulo}}</p>
+            <p class="task-time mb-0">{{tarefa.horario}}</p>
             </div>
           </div>
           <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-danger" aria-label="Excluir tarefa">
+            <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
-  
-  
-        <div class="task d-flex align-items-center justify-content-between">
-          <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-calendar-event fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
-            </div>
-          </div>
-          <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-danger" aria-label="Excluir tarefa">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </div>
-  
       </div>
-
     </div>
 
     <div class="late-tasks">
       <div class="today">
         <h2 class="ms-2 mt-3">Hoje</h2>
   
-        <div class="task d-flex align-items-center justify-content-between">
+        <div class="task align-items-center justify-content-between atrasada mb-1" ng-repeat="tarefa in hoje_atrasadas" data-id="{{tarefa.id}}">
           <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-clipboard fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Ir pra escola</p>
-              <p class="task-time mb-0">18:30-22:15</p>
+            <div class="d-flex flex-column align-items-center">
+              <i class="bi bi-clipboard fs-4"></i>
+              <p class="task-date mb-0">{{tarefa.data}}</p>
+            </div>
+            <div class="d-flex flex-column">
+              <p class="task-title mb-0">{{tarefa.titulo}}</p>
+              <p class="task-time mb-0">{{tarefa.horario}}</p>
             </div>
           </div>
           <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
+            <button class="btn text-success task-complete" aria-label="Concluir tarefa">
               <i class="bi bi-check-circle"></i>
-            </button>          
+            </button>
             <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
+            <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
-  
-        
-        <div class="task d-flex align-items-center justify-content-between">
-          <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-calendar-event fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Ir pra escola</p>
-              <p class="task-time mb-0">18:30-22:15</p>
-            </div>
-          </div>
-          <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
-              <i class="bi bi-check-circle"></i>
-            </button>          
-            <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </div>
-        
       </div>
+
       <div class="yesterday">
         <h2 class="ms-2 mt-4">Ontem</h2>
   
-        <div class="task d-flex align-items-center justify-content-between">
+        <div class="task align-items-center justify-content-between atrasada mb-1" ng-repeat="tarefa in ontem_atrasadas" data-id="{{tarefa.id}}">
           <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-clipboard fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
+            <div class="d-flex flex-column align-items-center">
+              <i class="bi bi-clipboard fs-4"></i>
+              <p class="task-date mb-0">{{tarefa.data}}</p>
+            </div>
+            <div class="d-flex flex-column">
+              <p class="task-title mb-0">{{tarefa.titulo}}</p>
+              <p class="task-time mb-0">{{tarefa.horario}}</p>
             </div>
           </div>
           <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
+            <button class="btn text-success task-complete" aria-label="Concluir tarefa">
               <i class="bi bi-check-circle"></i>
-            </button>          
+            </button>
             <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
+            <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
-  
-  
-        <div class="task d-flex align-items-center justify-content-between">
-          <div class="task-left d-flex align-items-center gap-3">
-            <i class="bi bi-calendar-event fs-4"></i>
-            <div>
-              <p class="task-title mb-0">Comprar pão de queijo</p>
-              <p class="task-time mb-0">14:30</p>
-            </div>
-          </div>
-          <div class="task-right d-flex align-items-center gap-2">
-            <button class="btn text-success" aria-label="Concluir tarefa">
-              <i class="bi bi-check-circle"></i>
-            </button>          
-            <button class="task-edit btn btn-sm">Editar</button>
-            <button class="btn text-danger" aria-label="Excluir tarefa">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </div>
-  
       </div>
-
     </div>
 
     <div class="task-overlay position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="z-index: 1;"></div>
@@ -321,8 +233,8 @@
         <input type="text" name="title" id="title" class="form-control w-50 rounded">
       </div>
       <div class="d-flex align-items-center gap-3 mb-3">
-        <p class="mb-0 fw-medium text-dark" style="min-width: 150px;">Horário de Realização</p>
-        <input type="text" name="horario" id="horario" class="form-control w-50 rounded">
+        <p class="mb-0 fw-medium text-dark" style="min-width: 150px;">Horário do Fim da Tarefa</p>
+        <input type="time" id="horario" required>
       </div>
       <div class="d-flex align-items-center gap-3 mb-0">
         <p class=" fw-medium text-dark" style="min-width: 150px;">Data</p>
@@ -340,7 +252,7 @@
       </div>
       <div class="d-flex align-items-center gap-3 mb-3">
         <p class="mb-0 fw-medium text-dark" style="min-width: 150px;">Horário de Realização</p>
-        <input type="text" name="horario-edit" id="horario-edit" class="form-control w-50 rounded">
+        <input type="time" id="horario-edit" required>
       </div>
       <div class="d-flex align-items-center gap-3 mb-0">
         <p class="fw-medium text-dark" style="min-width: 150px; margin-bottom: 0; line-height: 1.2;">Data</p>

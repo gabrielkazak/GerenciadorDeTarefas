@@ -20,21 +20,59 @@ const criarTarefa = async (req, res) =>{
 
 
 
-const buscarTarefas = async (req, res) =>{
+const buscarTarefas = async (req, res) => {
     try {
-        const { id_usuario, data } = req.params;
-
-        if (!id_usuario || !data) {
-            return res.status(400).json({ erro: 'Usuário ainda não tem tarefas armazenadas' });
+      const { id_usuario } = req.params;
+  
+      const hoje = new Date();
+      const amanha = new Date();
+      const ontem = new Date();
+      amanha.setDate(hoje.getDate() + 1);
+      ontem.setDate(hoje.getDate() - 1);
+  
+      const formatarData = (data) => data.toISOString().split('T')[0];
+      const hojeData = formatarData(hoje);
+      const ontemData = formatarData(ontem);
+      const amanhaData = formatarData(amanha);
+  
+      if (!id_usuario) {
+        return res.status(400).json({ erro: 'Usuário não encontrado' });
+      }
+  
+      const tarefas = await Tarefa.read(id_usuario, ontemData, hojeData, amanhaData);
+  
+      const categorias = {
+        hoje_pendentes: [],
+        hoje_concluidas: [],
+        hoje_atrasadas: [],
+        ontem_concluidas: [],
+        ontem_atrasadas: [],
+        amanha_pendentes: [],
+      };
+  
+      tarefas.forEach((tarefa) => {
+        const dataTarefa = formatarData(new Date(tarefa.data));
+        const estado = tarefa.estado.toLowerCase();
+  
+        if (dataTarefa === hojeData) {
+          if (estado === 'pendente') categorias.hoje_pendentes.push(tarefa);
+          else if (estado === 'concluida') categorias.hoje_concluidas.push(tarefa);
+          else if (estado === 'atrasada') categorias.hoje_atrasadas.push(tarefa);
+        } else if (dataTarefa === ontemData) {
+          if (estado === 'concluida') categorias.ontem_concluidas.push(tarefa);
+          else if (estado === 'atrasada') categorias.ontem_atrasadas.push(tarefa);
+        } else if (dataTarefa === amanhaData) {
+          if (estado === 'pendente') categorias.amanha_pendentes.push(tarefa);
         }
-
-        const task = await Tarefa.read(id_usuario, data);
-        res.status(200).json(task);
+      });
+  
+      res.status(200).json(categorias);
     } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
-        res.status(500).json({ erro: 'Erro ao buscar tarefas' });
+      console.error('Erro ao buscar tarefas:', error);
+      res.status(500).json({ erro: 'Erro ao buscar tarefas' });
     }
-}
+  };
+  
 
 
 
@@ -42,13 +80,13 @@ const buscarTarefas = async (req, res) =>{
 
 const alterarTarefa = async (req, res) =>{
     try {
-        const { id, titulo, horario, data, estado, id_usuario } = req.body;
+        const { id, titulo, horario, data, id_usuario } = req.body;
 
         if (!id || !id_usuario) {
             return res.status(400).json({ erro: 'Alteração não permitida' });
         }
 
-        const tarefaAtualizada = await Tarefa.update(id, titulo, horario, data, estado, id_usuario);
+        const tarefaAtualizada = await Tarefa.update(id, titulo, horario, data, id_usuario);
 
         if (!tarefaAtualizada) {
             return res.status(404).json({ erro: 'Tarefa não encontrada ou não pertence ao usuário' });
@@ -89,7 +127,6 @@ const deletarTarefa = async (req, res) =>{
 
 
 
-
 const alterarEstado = async (req, res) =>{
     try{
         const {id, id_usuario} = req.params;
@@ -116,4 +153,20 @@ const alterarEstado = async (req, res) =>{
     }
 }
 
-module.exports = {criarTarefa, buscarTarefas, alterarTarefa, deletarTarefa, alterarEstado};
+
+  const verificarTarefasAtrasadas = async (req, res) => {
+    try {
+      const { id_usuario } = req.params;
+
+      const tarefasAtrasadas = await Tarefa.atrasadas(id_usuario)
+      res.status(200).json({
+        mensagem: `${tarefasAtrasadas.rowCount} tarefa(s) marcadas como atrasadas`,
+        tarefas: tarefasAtrasadas.rows
+      });
+    } catch (err) {
+      console.error('Erro ao verificar tarefas atrasadas:', err);
+      res.status(500).json({ erro: 'Erro ao verificar tarefas atrasadas' });
+    }
+  };
+
+module.exports = {criarTarefa, buscarTarefas, alterarTarefa, deletarTarefa, alterarEstado, verificarTarefasAtrasadas};

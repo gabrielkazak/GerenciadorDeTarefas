@@ -1,5 +1,10 @@
 const token = localStorage.getItem('token');
-const id_usuario = localStorage.getItem('id_usuario')
+const id_usuario = localStorage.getItem('id_usuario');
+const username = localStorage.getItem('username');
+
+document.addEventListener('DOMContentLoaded', function (){
+  document.querySelector('.nomeUsuario').textContent = username;
+})
 
 function obterDataAtualFormatada() {
   const hoje = new Date();
@@ -49,6 +54,7 @@ document.querySelector('#create').addEventListener('click', async () => {
           document.querySelector('.task-overlay').style.display = 'none';
           titulo.value = '';
           horario.value = '';
+          location.reload()
       } else {
           const data = await response.json();
           console.log('Erro na criação da tarefa:', data);
@@ -59,24 +65,53 @@ document.querySelector('#create').addEventListener('click', async () => {
   }
 });
 
-//GET
 angular.module('tarefas', [])
   .controller('Rest', function ($scope, $http) {
-    const dataAtual = obterDataAtualFormatada(); 
-    
-    $http.get(`http://localhost:3000/api/tasks/${id_usuario}/${dataAtual}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(function (response) {
-      $scope.tarefas = response.data.map(tarefa => {
-        tarefa.data = converterParaPtBR(tarefa.data);
-        return tarefa;
+    const dataAtual = obterDataAtualFormatada();
+
+    // A requisição GET para buscar as tarefas será feita após o delay
+    setTimeout(() => {
+      $http.get(`http://localhost:3000/api/tasks/${id_usuario}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then(function (response) {
+        $scope.hoje_pendentes = response.data.hoje_pendentes.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+        $scope.hoje_concluidas = response.data.hoje_concluidas.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+        $scope.hoje_atrasadas = response.data.hoje_atrasadas.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+        $scope.ontem_concluidas = response.data.ontem_concluidas.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+        $scope.ontem_atrasadas = response.data.ontem_atrasadas.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+        $scope.amanha_pendentes = response.data.amanha_pendentes.map(tarefa => {
+          tarefa.data = converterParaPtBR(tarefa.data);
+          return tarefa;
+        });
+
+      }).catch(function (error) {
+        console.error("Erro ao buscar as tarefas:", error);
       });
-    }).catch(function (error) {
-      console.error("Erro ao buscar as tarefas:", error);
-    });
+    }, 500);
   });
+
 
 
 
@@ -98,7 +133,8 @@ function abrirTaskEditor(titulo, horario, data) {
   overlay.style.display = 'block';
 }
 
-document.querySelector('.all-tasks').addEventListener('click', async (event) => {
+document.querySelectorAll('.all-tasks, .late-tasks').forEach(taskContainer => {
+  taskContainer.addEventListener('click', async (event) => {
   const botao = event.target.closest('.task-edit');
   if (!botao) return;
 
@@ -107,11 +143,11 @@ document.querySelector('.all-tasks').addEventListener('click', async (event) => 
   window.tarefaSelecionada.titulo = divTarefa.querySelector('.task-title').textContent;
   window.tarefaSelecionada.horario = divTarefa.querySelector('.task-time').textContent;
   window.tarefaSelecionada.data = divTarefa.querySelector('.task-date').textContent;
-  window.tarefaSelecionada.estado = 'pendente';
 
   const { titulo, horario, data } = window.tarefaSelecionada;
 
   abrirTaskEditor(titulo, horario, data);
+  })
 });
 
 document.querySelector('#edit').addEventListener('click', async () => {
@@ -127,7 +163,7 @@ document.querySelector('#edit').addEventListener('click', async () => {
     return alert('Nenhuma tarefa selecionada!');
   }
 
-  const { id, estado } = window.tarefaSelecionada;
+  const { id } = window.tarefaSelecionada;
 
   try {
     const response = await fetch('http://localhost:3000/api/tasks/', {
@@ -141,7 +177,6 @@ document.querySelector('#edit').addEventListener('click', async () => {
         titulo: novoTitulo,
         horario: novoHorario,
         data: novaData,
-        estado: estado,
         id_usuario: id_usuario,
       })
     });
@@ -153,6 +188,7 @@ document.querySelector('#edit').addEventListener('click', async () => {
       console.log('Tarefa atualizada com sucesso:', resposta);
       editTask.style.display = 'none';
       overlay.style.display = 'none';
+      location.reload();
     } else {
       alert('Não foi possível atualizar a tarefa.');
     }
@@ -168,62 +204,96 @@ document.querySelector('.close').addEventListener('click', function() {
 });
 
 //DELETE
-document.querySelector('.all-tasks').addEventListener('click', async (event) => {
+document.body.addEventListener('click', async (event) => {
   const botao = event.target.closest('.task-delete');
   if (!botao) return;
 
   const divTarefa = botao.closest('.task');
   const id = divTarefa.dataset.id;
-  
-  try{
-    const response = await fetch(`http://localhost:3000/api/tasks/${id}/${id_usuario}`,{
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/tasks/${id}/${id_usuario}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-    })
-    
+    });
+
     if (response.ok) {
       divTarefa.remove();
     } else {
       alert('Não foi possível deletar a tarefa.');
     }
-  } catch(error){
+  } catch (error) {
     console.error('Erro na requisição DELETE:', error);
     alert('Erro ao tentar deletar a tarefa.');
   }
 });
 
 
-
 //PATCH
-document.querySelector('.all-tasks').addEventListener('click', async (event) => {
-  const botao = event.target.closest('.task-complete');
-  if (!botao) return;
+document.querySelectorAll('.all-tasks, .completed-tasks, .late-tasks').forEach(taskContainer => {
+  taskContainer.addEventListener('click', async (event) => {
+    const botao = event.target.closest('.task-complete');
+    if (!botao) return;
 
-  const divTarefa = botao.closest('.task');
-  const id = divTarefa.dataset.id;
-  
-  try{
-    const response = await fetch(`http://localhost:3000/api/tasks/${id}/${id_usuario}`,{
+    const divTarefa = botao.closest('.task');
+    const id = divTarefa.dataset.id;
+    
+    try {
+      const response = await fetch(`http://localhost:3000/api/tasks/${id}/${id_usuario}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          estado: 'concluida'
+        })
+      });
+
+      if (response.ok) {
+        location.reload();
+      } else {
+        alert('Não foi possível concluir a tarefa.');
+      }
+    } catch (error) {
+      console.error('Erro na requisição PATCH:', error);
+      alert('Erro ao tentar concluir a tarefa.');
+    }
+  });
+});
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+  try {
+    const response = await fetch(`http://localhost:3000/api/tasks/verify/${id_usuario}`, { 
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        estado: 'concluida'
-      })
-    })
-    
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
     if (response.ok) {
-      divTarefa.style.display = 'none'
+      const data = await response.json();
+      console.log(data.mensagem);
     } else {
-      alert('Não foi possível concluir a tarefa.');
+      console.warn("Não foi possível verificar tarefas atrasadas.");
     }
-  } catch(error){
-    console.error('Erro na requisição PATCH:', error);
-    alert('Erro ao tentar concluir a tarefa.');
+
+    setTimeout(() => {
+      angular.element(document).ready(function () {
+        const container = document.querySelector('.container');
+        container.classList.add('ativo');
+      });
+    }, 500);
+
+  } catch (error) {
+    console.error('Erro ao verificar tarefas atrasadas:', error);
   }
 });
+
