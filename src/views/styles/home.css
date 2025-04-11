@@ -16,10 +16,18 @@ html, body {
 }
 
 /*Container Geral*/
-.container{
-    border-radius: 10px !important;
-    height: 625px;
-    overflow-y:  scroll    ;
+.container {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+  border-radius: 10px !important;
+  height: 625px;
+  overflow-y: scroll;
+}
+
+.container.ativo {
+  opacity: 1;
+  visibility: visible;
 }
 
 .botao{
@@ -42,8 +50,20 @@ html, body {
     display: flex;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
+    
   }
   
+
+  .concluida{
+    background-color: rgb(203, 247, 232) !important;
+    border-radius: 16px;
+  }
+
+  .atrasada{
+    background-color: rgb(247, 203, 203) !important;
+    border-radius: 16px;
+  }
+
 /*Próximos 3 estilos são do lado esquerdo da task*/
 .task-left p,
 .task-left i {
@@ -194,5 +214,29 @@ html, body {
   }
   
   
-  
+  /* Estilo moderno para input de hora */
+input[type="time"] {
+  background-color: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 7px;
+  font-size: 16px;
+  color: #000000;
+  width: 115px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+/* Hover: muda a borda suavemente */
+input[type="time"]:hover {
+  border-color: #999;
+}
+
+/* Focus: mostra uma borda azul com sombra */
+input[type="time"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
   

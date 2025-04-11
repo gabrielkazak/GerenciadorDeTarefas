@@ -6,7 +6,6 @@ const fazerLogin = async (req, res) =>{
     try{
         //Usuario.testar();
         const {email, senha} = req.body;
-        console.log("Email recebido", email);
 
         const usuario = await Usuario.buscaUsuario(email);
 
@@ -27,7 +26,7 @@ const fazerLogin = async (req, res) =>{
             { expiresIn: '8h' }
         );
 
-        res.json({ token, id_usuario: usuario.id });
+        res.json({ token, id_usuario: usuario.id, username: usuario.nome_usuario });
 
     } catch (error) {
         console.error("Erro no servidor:", error);
