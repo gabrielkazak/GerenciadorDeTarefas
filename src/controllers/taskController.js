@@ -22,13 +22,13 @@ const criarTarefa = async (req, res) =>{
 
 const buscarTarefas = async (req, res) =>{
     try {
-        const { id_usuario } = req.params;
+        const { id_usuario, data } = req.params;
 
-        if (!id_usuario) {
+        if (!id_usuario || !data) {
             return res.status(400).json({ erro: 'Usuário ainda não tem tarefas armazenadas' });
         }
 
-        const task = await Tarefa.read(id_usuario);
+        const task = await Tarefa.read(id_usuario, data);
         res.status(200).json(task);
     } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
@@ -65,7 +65,7 @@ const alterarTarefa = async (req, res) =>{
 
 
 
-const deletarUsuario = async (req, res) =>{
+const deletarTarefa = async (req, res) =>{
     try {
         const { id, id_usuario } = req.params;
 
@@ -116,4 +116,4 @@ const alterarEstado = async (req, res) =>{
     }
 }
 
-module.exports = {criarTarefa, buscarTarefas, alterarTarefa, deletarUsuario, alterarEstado};
+module.exports = {criarTarefa, buscarTarefas, alterarTarefa, deletarTarefa, alterarEstado};

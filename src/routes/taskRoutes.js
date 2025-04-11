@@ -4,11 +4,11 @@ const taskController = require('../controllers/taskController')
 
 router.post('/', taskController.criarTarefa);
 
-router.get('/:id_usuario', taskController.buscarTarefas);
+router.get('/:id_usuario/:data', taskController.buscarTarefas);
 
 router.put('/', taskController.alterarTarefa);
 
-router.delete('/:id/:id_usuario', taskController.deletarUsuario);
+router.delete('/:id/:id_usuario', taskController.deletarTarefa);
 
 router.patch('/:id/:id_usuario', taskController.alterarEstado);
 
