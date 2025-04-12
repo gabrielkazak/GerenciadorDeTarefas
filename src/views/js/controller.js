@@ -69,7 +69,6 @@ angular.module('tarefas', [])
   .controller('Rest', function ($scope, $http) {
     const dataAtual = obterDataAtualFormatada();
 
-    // A requisição GET para buscar as tarefas será feita após o delay
     setTimeout(() => {
       $http.get(`http://localhost:3000/api/tasks/${id_usuario}`, {
         headers: {
@@ -109,7 +108,7 @@ angular.module('tarefas', [])
       }).catch(function (error) {
         console.error("Erro ao buscar as tarefas:", error);
       });
-    }, 500);
+    }, 1000);
   });
 
 
@@ -290,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const container = document.querySelector('.container');
         container.classList.add('ativo');
       });
-    }, 500);
+    }, 1000);
 
   } catch (error) {
     console.error('Erro ao verificar tarefas atrasadas:', error);

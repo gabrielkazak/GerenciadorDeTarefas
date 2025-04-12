@@ -36,8 +36,11 @@ class Database {
 
     async query(sql, params = []) {
         console.log("Obtendo conexão do pool...");
-        const client = await this.connect()
-
+        const client = await this.connect();
+    
+        // Seta o fuso horário logo após conectar
+        await client.query("SET TIME ZONE 'America/Sao_Paulo'");
+    
         try {
             console.log("Executando query...");
             const result = await client.query(sql, params);
@@ -51,6 +54,7 @@ class Database {
             console.log("Conexão devolvida ao pool.");
         }
     }
+    
 
     async close() {
         console.log("Conexões ativas antes de fechar:", this.pool.totalCount);
