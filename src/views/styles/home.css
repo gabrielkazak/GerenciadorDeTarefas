@@ -15,6 +15,10 @@ html, body {
     padding: 1em 0;
 }
 
+.cabecalho_direita{
+  display: none !important;
+}
+
 /*Container Geral*/
 .container {
   opacity: 0;

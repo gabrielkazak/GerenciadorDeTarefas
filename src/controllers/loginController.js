@@ -4,7 +4,6 @@ require('dotenv').config();
 
 const fazerLogin = async (req, res) =>{
     try{
-        //Usuario.testar();
         const {email, senha} = req.body;
 
         const usuario = await Usuario.buscaUsuario(email);

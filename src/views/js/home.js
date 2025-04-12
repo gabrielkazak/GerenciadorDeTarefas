@@ -1,3 +1,8 @@
+// Proteção de rota: se não houver token, redireciona para login
+if (!localStorage.getItem('token') || !localStorage.getItem('id_usuario')) {
+  window.location.href = 'login.html';
+}
+
 function atualizarData() { //Função que atualiza a data que aparece no menu Hamburguer
   const hoje = new Date();
 
@@ -172,5 +177,15 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
     calendarioContainer.classList.add('d-none');
   })
 
+document.body.addEventListener('click', (event) => {
+  const logout = event.target.closest('.logout-button');
+
+  if (!logout) return;
+
+  localStorage.removeItem('token');
+  localStorage.removeItem('id_usuario');
+  localStorage.removeItem('username');
+  window.location.href = 'login.html'
+})
 
   
