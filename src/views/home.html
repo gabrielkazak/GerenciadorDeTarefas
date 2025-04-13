@@ -92,8 +92,8 @@
             <p class="fw-normal mb-0">Adicionar Tarefa para Hoje</p>
           </div>
         </div>
-        
       </div>
+
       <div class="tomorrow">
         <h2 class="ms-2 mt-4">Amanhã</h2>
   
@@ -116,6 +116,15 @@
             <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
               <i class="bi bi-trash"></i>
             </button>
+          </div>
+        </div>
+
+        <div class="task d-flex align-items-center justify-content-between py-3 px-3">
+          <div class="task-left d-flex align-items-center gap-3">
+            <button class="btn btn-task-tomorrow btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+              <i class="bi bi-plus" style="font-size: 1.5rem; font-weight: light;"></i>
+            </button>
+            <p class="fw-normal mb-0">Adicionar Tarefa para Amanhã</p>
           </div>
         </div>
       </div>
@@ -143,7 +152,6 @@
             </button>
           </div>
         </div>
-     
       </div>
 
       <div class="yesterday">
@@ -271,14 +279,14 @@
       </div>
 
       <div class="calendario_tasks bg-light" ng-class="{ 'ativo': dataSelecionada }" ng-show="dataSelecionada" ng-controller="CalendarioController">
-        <h2 class="ms-2 mt-3">{{dataSelecionada}}</h2>
+        <h2 class="ms-2 mt-3">{{dataFormatada}}</h2>
         <button class="btn btn-sm btn-danger ms-2 mb-2" ng-click="fecharCalendario()">Fechar</button>
         <div>
           <div class="task align-items-center justify-content-between" ng-repeat="tarefa in tarefa_dia" data-id="{{tarefa.id}}">
             <div class="task-left d-flex align-items-center gap-3">
               <div class="d-flex flex-column align-items-center">
                 <i class="bi bi-clipboard fs-4"></i>
-                <p class="task-date mb-0">{{dataSelecionada}}</p>
+                <p class="task-date mb-0">{{dataFormatada}}</p>
               </div>
               <div class="d-flex flex-column">
                 <p class="task-title mb-0">{{tarefa.titulo}}</p>
@@ -302,14 +310,14 @@
             <button class="btn btn-task btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;" ng-click="abrirTaskCreator(dataSelecionada)">
               <i class="bi bi-plus" style="font-size: 1.5rem; font-weight: light;"></i>
             </button>
-            <p class="fw-normal mb-0">Adicionar Tarefa em {{dataSelecionada}}</p>
+            <p class="fw-normal mb-0">Adicionar Tarefa em {{dataFormatada}}</p>
           </div>
         </div>
         
       </div>
   </div>
   <div ng-view></div>
-  <!-- Bibliotecas -->
+  
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

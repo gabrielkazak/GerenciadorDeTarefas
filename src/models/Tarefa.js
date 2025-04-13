@@ -6,11 +6,13 @@ class Tarefa{
         return result[0];
     }
 
+    //BUSCA AS TAREFAS DE ONTEM, HOJE E AMANHA
     static async read(id_usuario, ontem, hoje, amanha){
         const result = await db.query('SELECT * FROM tasks WHERE id_usuario = $1 AND data IN ($2, $3, $4)', [id_usuario, ontem, hoje, amanha]);
         return result;
     }
 
+    //BUSCA AS TAREFAS BASEADA NO DIA ESPECIFICO
     static async readByDate(id_usuario, data){
         const result = await db.query('SELECT * FROM tasks WHERE id_usuario = $1 AND data = $2', [id_usuario, data]);
         return result;
