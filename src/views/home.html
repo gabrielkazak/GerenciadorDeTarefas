@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" ng-app="tarefas">
+<html lang="pt-br" ng-app="appPrincipal">
 <head>
   <meta charset="UTF-8">
   <title>Gerenciador de Tarefas</title>
@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles/home.css">
 </head>
 
-<body class="h-100 d-flex align-items-center justify-content-center bg-dark" ng-app="tarefas" ng-controller="Rest">
+<body class="h-100 d-flex align-items-center justify-content-center bg-dark" ng-controller="Rest">
 
   <div class="container position-relative bg-light flex-column ms-3 me-3" style="height: 85vh; display: flex;">
 
@@ -260,7 +260,7 @@
       </div>
       <button id="edit" class="button-31 mb-3" role="button">Editar Tarefa</button>
     </div>
-    
+
       <div id="calendarioContainer" class="calendar-slide bg-dark shadow rounded-4 p-4 mt-3" style="display: none;">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <button id="mesAnterior" class="btn btn-dark"><i class="bi bi-chevron-left"></i></button>
@@ -270,6 +270,43 @@
         <div id="calendario" class="d-grid" style="grid-template-columns: repeat(7, 1fr); gap: 10px; min-height: 400px;"></div>
       </div>
 
+      <div class="calendario_tasks bg-light" ng-class="{ 'ativo': dataSelecionada }" ng-show="dataSelecionada" ng-controller="CalendarioController">
+        <h2 class="ms-2 mt-3">{{dataSelecionada}}</h2>
+        <button class="btn btn-sm btn-danger ms-2 mb-2" ng-click="fecharCalendario()">Fechar</button>
+        <div>
+          <div class="task align-items-center justify-content-between" ng-repeat="tarefa in tarefa_dia" data-id="{{tarefa.id}}">
+            <div class="task-left d-flex align-items-center gap-3">
+              <div class="d-flex flex-column align-items-center">
+                <i class="bi bi-clipboard fs-4"></i>
+                <p class="task-date mb-0">{{dataSelecionada}}</p>
+              </div>
+              <div class="d-flex flex-column">
+                <p class="task-title mb-0">{{tarefa.titulo}}</p>
+                <p class="task-time mb-0">{{tarefa.horario}}</p>
+              </div>
+            </div>
+            <div class="task-right d-flex align-items-center gap-2">
+              <button class="btn text-success task-complete" aria-label="Concluir tarefa">
+                <i class="bi bi-check-circle"></i>
+              </button>
+              <button class="task-edit btn btn-sm">Editar</button>
+              <button class="btn text-danger task-delete" aria-label="Excluir tarefa">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      
+        <div class="task d-flex align-items-center justify-content-between py-3 px-3">
+          <div class="task-left d-flex align-items-center gap-3">
+            <button class="btn btn-task btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;" ng-click="abrirTaskCreator(dataSelecionada)">
+              <i class="bi bi-plus" style="font-size: 1.5rem; font-weight: light;"></i>
+            </button>
+            <p class="fw-normal mb-0">Adicionar Tarefa em {{dataSelecionada}}</p>
+          </div>
+        </div>
+        
+      </div>
   </div>
   <div ng-view></div>
   <!-- Bibliotecas -->

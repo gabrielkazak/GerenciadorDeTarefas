@@ -6,13 +6,6 @@ document.addEventListener('DOMContentLoaded', function (){
   document.querySelector('.nomeUsuario').textContent = username;
 })
 
-function obterDataAtualFormatada() {
-  const hoje = new Date();
-  const ano = hoje.getFullYear();
-  const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-  const dia = String(hoje.getDate()).padStart(2, '0');
-  return `${ano}-${mes}-${dia}`;
-}
 function converterParaPtBR(dataISO) {
   const [ano, mes, dia] = dataISO.split('T')[0].split('-');
   return `${dia}/${mes}`;
@@ -24,8 +17,19 @@ document.querySelector('#create').addEventListener('click', async () => {
   let horario = document.querySelector('#horario').value;
   let data = createTask.querySelector('#data').textContent;
 
-  const [dia, mes, ano] = data.split('/');
-  const dataFormatada = `${ano}-${mes}-${dia}`;
+  let dataFormatada = '';
+
+  if (data.includes('/')) {
+    // formato DD/MM/YYYY
+    const [dia, mes, ano] = data.split('/');
+    dataFormatada = `${ano}-${mes}-${dia}`;
+  } else if (data.includes('-')) {
+    // formato YYYY-MM-DD, já pronto
+    dataFormatada = data;
+  } else {
+    console.error("Formato de data não reconhecido:", data);
+    return alert("Erro ao processar a data");
+  }
 
   if (!titulo || !horario) {
       return alert('Preencha todos os campos');
@@ -67,7 +71,6 @@ document.querySelector('#create').addEventListener('click', async () => {
 
 angular.module('tarefas', [])
   .controller('Rest', function ($scope, $http) {
-    const dataAtual = obterDataAtualFormatada();
 
     setTimeout(() => {
       $http.get(`http://localhost:3000/api/tasks/${id_usuario}`, {
@@ -110,6 +113,82 @@ angular.module('tarefas', [])
       });
     }, 1000);
   });
+
+
+  angular.module('calendarioApp', []) // Módulo separado para o calendário
+  .controller('CalendarioController', function ($scope, $http) {
+    // Recupera a data selecionada do localStorage
+    const dataSelecionada = localStorage.getItem('dataSelecionada');
+    
+    // Verifica se dataSelecionada existe
+    if (dataSelecionada) {
+      $scope.dataSelecionada = dataSelecionada;
+
+
+      if (!id_usuario || !token) {
+        console.error("id_usuario ou token não encontrados");
+        return; // Previne a requisição caso não tenha essas variáveis
+      }
+
+      $http.get(`http://localhost:3000/api/tasks/dia/${id_usuario}/${dataSelecionada}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(function (res) {
+        // Definindo as tarefas no $scope
+        console.log(res.data);
+        $scope.tarefa_dia = res.data;
+      }).catch(function (error) {
+        console.error("Erro ao buscar as tarefas:", error);
+      });
+    } else {
+      console.error("Data selecionada não encontrada no localStorage.");
+    }
+
+    setInterval(function () {
+      let novaDataBruta = localStorage.getItem('dataSelecionada');
+
+      // Se não tiver data ou o formato estiver incorreto, não faz nada e retorna
+      if (!novaDataBruta || !/^\d{4}-\d{2}-\d{2}$/.test(novaDataBruta)) {
+        return;
+      }
+
+      let novaData = novaDataBruta;
+
+      if (novaData && novaData !== $scope.dataSelecionada) {
+        $scope.dataSelecionada = novaData;
+    
+        // Atualiza as tarefas da nova data
+        $http.get(`http://localhost:3000/api/tasks/dia/${id_usuario}/${novaData}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(function (res) {
+          $scope.tarefa_dia = res.data;
+        });
+    
+        if (!$scope.$$phase) $scope.$apply(); // força Angular a renderizar
+      }
+    }, 300); // verifica a cada 300ms
+
+    $scope.abrirTaskCreator = function (data) {
+      const createTask = document.querySelector('.task-creator');
+      const campoData = createTask.querySelector('#data'); //Seleciona o campo Data do formulário de criação de tarefas
+  
+      campoData.textContent = data || new Date().toLocaleDateString('pt-BR'); // Atribui a data à caixa de texto
+  
+      // Exibe o formulário
+      createTask.style.display = 'flex';
+    };
+    
+    $scope.fecharCalendario = function () {
+      localStorage.removeItem('dataSelecionada');
+      location.reload();
+    };
+    
+  });
+
+  angular.module('appPrincipal', ['tarefas', 'calendarioApp']);
 
 
 

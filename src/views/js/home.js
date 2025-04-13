@@ -63,21 +63,64 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
   let overlay = document.querySelector('.task-overlay') //Filtro que escurece a tela embaixo da criação de tarefa
 
 
-  function abrirTaskCreator(data = null) { //Se o parametro data nao for passado, recebe nulo
-    const campoData = createTask.querySelector('#data'); //Seleciona o campo Data do formulario de criação de tarefas
-  
-    if (!data) { // Se data for nulo, a função irá atribuir a data baseada na data do navegador
-      const hoje = new Date();
-      data = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-  
-    campoData.textContent = data;
-  
-    // Mostra o task-creator
-    createTask.style.display = 'none';
-    createTask.style.display = 'flex';
+
+ // Função para formatar a data para o formato correto (YYYY-MM-DD)
+function formatarData(data) {
+  if (!data) return null;  // Verifica se a data não é nula ou undefined
+
+  // Caso a data seja no formato "DD/MM/YYYY", vamos dividir e reorganizar
+  const dataArray = data.split('/'); // Exemplo: "31/05/2025" -> [31, 05, 2025]
+
+  if (dataArray.length !== 3) {
+    console.error("Formato de data inválido:", data);
+    return null;
   }
-  
+
+  const dia = dataArray[0];
+  const mes = dataArray[1];
+  const ano = dataArray[2];
+
+  // Verifica se a data possui valores válidos para dia, mês e ano
+  if (!ano || !mes || !dia) {
+    console.error('Valores inválidos na data:', { ano, mes, dia });
+    return null;
+  }
+
+  // Garante que o mês e o dia tenham dois dígitos
+  const dataFormatada = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+  return dataFormatada; // Exemplo: "2025-05-31"
+}
+
+function abrirTaskCreator(data = null) {
+  const campoData = createTask.querySelector('#data'); // Seleciona o campo Data do formulário de criação de tarefas
+
+  if (!data) {
+    // Se a data for nula, atribui a data baseada na data do navegador
+    const hoje = new Date();
+    // Formato: "DD/MM/YYYY"
+    data = hoje.toLocaleDateString('pt-BR');
+  }
+
+  console.log("Data recebida antes de formatar:", data);  // Verifica a data recebida
+
+  // Formata a data antes de exibi-la
+  const dataFormatada = formatarData(data);
+
+  if (!dataFormatada) {
+    // Se a data for inválida, não exibe e não faz nada
+    alert("Data inválida!");
+    return;
+  }
+
+  // Exibe a data formatada no campo de data
+  campoData.textContent = dataFormatada;
+
+  // Mostra o task-creator
+  createTask.style.display = 'none';
+  createTask.style.display = 'flex';
+}
+
+
   
   botaoTask.addEventListener('click', function(){
     abrirTaskCreator()
@@ -99,6 +142,7 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
   const btnAnterior = document.getElementById('mesAnterior');
   const btnProximo = document.getElementById('mesProximo');
   const btnCalendario = document.querySelector('.bi-calendar-event')?.closest('button');
+  const calendarioTasks = document.querySelector('.calendario_tasks');
   
 
   const opcoes = document.querySelector('.options');
@@ -134,14 +178,31 @@ function resetStyles() { //Função que auxilia na troca de Setores de tarefas
       const dia = document.createElement('div');
       dia.className = 'text-center p-2 rounded bg-dark text-white w-35 border border-light fw-medium calendario-dia';
       dia.textContent = i;
+
       dia.addEventListener('click', () => {
         const diaClicado = String(i).padStart(2, '0'); //Garante que a substring, nesse caso dia, tenha 2 caracteres, e se nao tiver, adiciona um 0 no começo
         const mesClicado = String(data.getMonth() + 1).padStart(2, '0');
         const ano = data.getFullYear();
-        const dataFormatada = `${diaClicado}/${mesClicado}/${ano}`;
-        
-        abrirTaskCreator(dataFormatada);
-        overlay.style.display = 'block'
+
+        const hoje = new Date();
+        const dataClicada = new Date(`${ano}-${mesClicado}-${diaClicado}`);
+
+
+        const diaAtual = hoje.getDate();
+        const mesAtual = hoje.getMonth();
+        const anoAtual = hoje.getFullYear();
+
+        const dataIsFutura =
+        dataClicada > hoje &&
+        (dataClicada.getDate() !== diaAtual ||
+        dataClicada.getMonth() !== mesAtual ||
+        dataClicada.getFullYear() !== anoAtual);
+
+        if (dataIsFutura) {
+          const dataFormatada = `${ano}-${mesClicado}-${diaClicado}`;
+          localStorage.setItem('dataSelecionada', dataFormatada);
+          //document.querySelector('.calendario_tasks').classList.add('ativo');
+        }
       });
       calendario.appendChild(dia);
     }

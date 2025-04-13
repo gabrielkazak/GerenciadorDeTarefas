@@ -11,6 +11,11 @@ class Tarefa{
         return result;
     }
 
+    static async readByDate(id_usuario, data){
+        const result = await db.query('SELECT * FROM tasks WHERE id_usuario = $1 AND data = $2', [id_usuario, data]);
+        return result;
+    }
+
     static async update(id, titulo, horario, data, id_usuario){
         const result = await db.query('UPDATE tasks SET titulo = $1, horario = $2, data = $3 WHERE id = $4 AND id_usuario = $5 RETURNING *', [titulo, horario, data, id, id_usuario])
         return result;

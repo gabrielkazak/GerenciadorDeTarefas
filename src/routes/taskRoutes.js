@@ -6,6 +6,8 @@ router.post('/', taskController.criarTarefa);
 
 router.get('/:id_usuario', taskController.buscarTarefas);
 
+router.get('/dia/:id_usuario/:data', taskController.buscarTarefasPorDia);
+
 router.put('/', taskController.alterarTarefa);
 
 router.delete('/:id/:id_usuario', taskController.deletarTarefa);
