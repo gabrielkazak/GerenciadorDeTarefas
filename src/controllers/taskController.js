@@ -74,7 +74,23 @@ const buscarTarefas = async (req, res) => {
   };
   
 
-
+const buscarTarefasPorDia = async (req, res) => {
+  try {
+    const { id_usuario, data } = req.params;
+  
+    if (!id_usuario || !data) {
+      return res.status(400).json({ erro: 'Usuário ou data não fornecidos' });
+    }
+  
+    const tarefas = await Tarefa.readByDate(id_usuario, data);
+  
+    res.status(200).json(tarefas);
+  } catch (error) {
+    console.error('Erro ao buscar tarefas por dia:', error);
+    res.status(500).json({ erro: 'Erro ao buscar tarefas por dia' });
+  }
+};
+  
 
 
 
@@ -169,4 +185,4 @@ const alterarEstado = async (req, res) =>{
     }
   };
 
-module.exports = {criarTarefa, buscarTarefas, alterarTarefa, deletarTarefa, alterarEstado, verificarTarefasAtrasadas};
+module.exports = {criarTarefa, buscarTarefas, buscarTarefasPorDia, alterarTarefa, deletarTarefa, alterarEstado, verificarTarefasAtrasadas};

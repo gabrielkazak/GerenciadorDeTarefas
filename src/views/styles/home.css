@@ -21,12 +21,13 @@ html, body {
 
 /*Container Geral*/
 .container {
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
   transition: opacity 0.5s ease;
   border-radius: 10px !important;
   height: 625px;
   overflow-y: scroll;
+  position: relative !important;
 }
 
 .container.ativo {
@@ -126,16 +127,18 @@ html, body {
 
 /*Criador de tarefas*/
 .task-creator {
-    display: none;
-    border-radius: 12px;
-    width: 50%;
-    height: 60%;
-    background-color: #ffffff;
-    position: absolute;
-    top: 15%; /* valor ajustável conforme o quanto você quer subir */
-    left: 50%;
-    transform: translateX(-50%);
-  }
+  display: none; /* Inicialmente escondido */
+  border-radius: 12px;
+  width: 50%;
+  height: 60%;
+  background-color: #ffffff;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
 
   .task-editor{
     display: none;
@@ -216,7 +219,23 @@ html, body {
   .calendario-dia:hover{
     background-color: #343333 !important;
   }
+
+  .calendario_tasks{
+    opacity: 0;
+    visibility: hidden;
+  }
   
+  .calendario_tasks.ativo{
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    position: absolute;
+    top: 80px;
+    width: 99%;
+    height: 90%;
+    border-radius: 20px;
+    padding: 24px;
+  }
   
   /* Estilo moderno para input de hora */
 input[type="time"] {
