@@ -73,7 +73,7 @@ Este é um sistema de gestão de tarefas desenvolvido como trabalho prático da 
 
     Todas as dependências já estão no package.json, apenas rode no terminal:
 
-**npm install**
+    **npm install**
 
 3. Crie o banco de dados:
 
