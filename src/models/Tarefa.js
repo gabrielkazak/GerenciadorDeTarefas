@@ -44,7 +44,7 @@ class Tarefa{
                 SET estado = 'atrasada'
                 WHERE id_usuario = $1 
                 AND estado = 'pendente' 
-                AND TO_TIMESTAMP(data || ' ' || horario, 'YYYY-MM-DD HH24:MI') < (NOW() - INTERVAL '3 hours')
+                AND TO_TIMESTAMP(data || ' ' || horario, 'YYYY-MM-DD HH24:MI') < (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')
             `, [id_usuario]);   
     
             // Atualizar tarefas atrasadas para pendente, se o horário for no futuro (considerando fuso horário)
@@ -53,7 +53,7 @@ class Tarefa{
                 SET estado = 'pendente'
                 WHERE id_usuario = $1
                 AND estado = 'atrasada'
-                AND TO_TIMESTAMP(data || ' ' || horario, 'YYYY-MM-DD HH24:MI') > (NOW() - INTERVAL '3 hours')
+                AND TO_TIMESTAMP(data || ' ' || horario, 'YYYY-MM-DD HH24:MI') > (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo')
             `, [id_usuario]);
     
             return { mensagem: 'Tarefas atualizadas com sucesso.' };

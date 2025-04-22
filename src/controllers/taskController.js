@@ -32,12 +32,22 @@ const buscarTarefas = async (req, res) => {
     const { id_usuario } = req.params;
 
     const hoje = new Date();
-    const amanha = new Date();
-    const ontem = new Date();
+    hoje.setHours(0, 0, 0, 0); // zera hora, min, seg, ms
+
+    const amanha = new Date(hoje);
     amanha.setDate(hoje.getDate() + 1);
+
+    const ontem = new Date(hoje);
     ontem.setDate(hoje.getDate() - 1);
 
-    const formatarData = (data) => data.toISOString().split('T')[0];
+
+    const formatarData = (data) => {
+      const ano = data.getFullYear();
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const dia = String(data.getDate()).padStart(2, '0');
+      return `${ano}-${mes}-${dia}`;
+    };
+    
     const hojeData = formatarData(hoje);
     const ontemData = formatarData(ontem);
     const amanhaData = formatarData(amanha);
