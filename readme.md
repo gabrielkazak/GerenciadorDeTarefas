@@ -114,7 +114,7 @@ Comando usado pra banco PostgreSQL, o original foi feito em Neon.Tech:
 
 ## 📄 Documentação com Swagger
     Acesse: http://localhost:3000/api-docs
-    Swagger configurado em ./src/routes/*.js
+    Swagger configurado em ./src/docs/swagger.js
 
 ---
 
